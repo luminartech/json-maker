@@ -297,7 +297,7 @@ char *json_double(char *dest, char const *name, double value)
   X(json_uint, unsigned int, "%u")    \
   X(json_ulong, unsigned long, "%lu") \
   X(json_verylong, long long, "%lld") \
-  X(json_double, double, "%g")
+  X(json_double, double, "%.10g")
 
 #define json_num(funcname, type, fmt)                      \
   char *funcname(char *dest, char const *name, type value) \
