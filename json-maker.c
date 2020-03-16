@@ -210,6 +210,7 @@ char *json_end(char *dest)
 	return dest;
 }
 
+#define NO_SPRINTF
 #ifdef NO_SPRINTF
 
 static char *format(char *dest, int len, int isnegative)
@@ -230,6 +231,8 @@ static char *format(char *dest, int len, int isnegative)
 	return dest + len;
 }
 
+#pragma GCC diagnostic push // require GCC 4.6
+#pragma GCC diagnostic ignored "-Wtype-limits"
 #define numtoa(func, type, utype)                                                                                                \
 	static char *func(char *dest, type val)                                                                                        \
 	{                                                                                                                              \
@@ -274,8 +277,14 @@ ALL_TYPES
 #define X(name, type, utype) json_num(json_##name, name##toa, type)
 ALL_TYPES
 #undef X
+#pragma GCC diagnostic pop // require GCC 4.6
+
+#pragma GCC diagnostic push // require GCC 4.6
+#pragma GCC diagnostic ignored "-Wfloat-conversion"
 
 char *json_double(char *dest, char const *name, double value) { return json_verylong(dest, name, value); }
+
+#pragma GCC diagnostic pop // require GCC 4.6
 
 #else
 
