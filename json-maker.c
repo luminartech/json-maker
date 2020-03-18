@@ -24,7 +24,10 @@
 */
 
 #include "json-maker.h"
+#include <ryu/ryu.h>
 #include <stddef.h> // For NULL
+#include <stdlib.h>
+#include <string.h>
 
 /** Add a character at the end of a string.
  * @param dest Pointer to the null character of the string
@@ -282,7 +285,17 @@ ALL_TYPES
 #pragma GCC diagnostic push // require GCC 4.6
 #pragma GCC diagnostic ignored "-Wfloat-conversion"
 
-char *json_double(char *dest, char const *name, double value) { return json_verylong(dest, name, value); }
+char *json_double(char *dest, char const *name, double value)
+{
+	// return json_verylong(dest, name, value);
+	dest    = primitivename(dest, name);
+	char *f = d2s(value);
+	dest    = memmove(dest, f, strlen(f));
+	dest += strlen(f);
+	dest = chtoa(dest, ',');
+	free(f);
+	return dest;
+}
 
 #pragma GCC diagnostic pop // require GCC 4.6
 
